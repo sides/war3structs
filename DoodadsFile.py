@@ -9,12 +9,21 @@ from structs.common import *
   present on the map.
 """
 
-ItemSet = Struct(
+DoodadItemSet = Struct(
   "items_count" / Integer,
   "items" / Array(this.items_count, Struct(
-    "item_id" / ByteId,
+    "item_id" / ByteId, # this can use the "random item id" type of id
+                        # see the UnitDoodadRandomUnit struct in
+                        # UnitDoodadsFile for details
     "chance_percent" / Integer
   ))
+)
+
+DoodadVisibilityFlags = Enum(Byte,
+  INVISIBLE_NONSOLID = 0,
+  VISIBLE_NONSOLID   = 1,
+  VISIBLE_SOLID      = 2,
+  OUT_OF_BOUNDS      = 3 # ?
 )
 
 Doodad = Struct(
@@ -27,16 +36,11 @@ Doodad = Struct(
   "scale_x" / Float,
   "scale_y" / Float,
   "scale_z" / Float,
-  "visibility" / Enum(Byte,
-    INVISIBLE_NONSOLID = 0,
-    VISIBLE_NONSOLID   = 1,
-    VISIBLE_SOLID      = 2,
-    OUT_OF_BOUNDS      = 3 # ?
-  ),
+  "visibility" / DoodadVisibilityFlags,
   "life_percent" / Byte, # -1 for doodads
   "dropped_item_table_index" / Integer, # -1 for no item drop from the map item tables
   "dropped_item_sets_count" / Integer, # only if above is -1
-  "dropped_item_sets" / Array(this.dropped_item_sets_count, ItemSet),
+  "dropped_item_sets" / Array(this.dropped_item_sets_count, DoodadItemSet),
   "index" / Integer
 )
 
