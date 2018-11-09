@@ -5,20 +5,20 @@ from structs.common import *
   Formats: doo
   Version: 8
 
-  The doodads file contains the location of trees and other
-  destructibles and doodads on the map.
+  The doodads file describes trees and other destructibles and doodads
+  present on the map.
 """
 
 ItemSet = Struct(
   "items_count" / Integer,
   "items" / Array(this.items_count, Struct(
-    "id" / ByteId,
+    "item_id" / ByteId,
     "chance_percent" / Integer
   ))
 )
 
 Doodad = Struct(
-  "id" / ByteId,
+  "doodad_id" / ByteId,
   "variation" / Integer,
   "pos_x" / Float,
   "pos_y" / Float,
@@ -44,7 +44,7 @@ Doodad = Struct(
 # with the terrain palette in the editor, not the doodad palette. Doing
 # this presumably turns them into data in the environment file instead.
 TerrainDoodad = Struct(
-  "id" / ByteId,
+  "doodad_id" / ByteId,
   "pos_z" / Integer, # ? (always 0)
   "pos_x" / Integer, # ?
   "pos_y"/ Integer # ?
