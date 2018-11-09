@@ -93,19 +93,23 @@ TechAvalabilityChange = Struct(
 )
 
 RandomUnitTable = Struct(
-  "number" / Integer,
+  "index" / Integer,
   "name" / String,
   "positions_count" / Integer,
-  "positions" / Integer[this.positions_count],
+  "positions" / Array(this.positions_count, Enum(Integer,
+    UNITS     = 0,
+    BUILDINGS = 1,
+    ITEMS     = 2
+  )),
   "units_count" / Integer,
   "units" / Array(this.units_count, Struct(
     "chance_percent" / Integer,
-    "position_ids" / Byte[this._.positions_count * 4]
+    "unit_ids" / Byte[this._.positions_count * 4]
   ))
 )
 
 RandomItemTable = Struct(
-  "number" / Integer,
+  "index" / Integer,
   "name" / String,
   "sets_count" / Integer,
   "sets" / Array(this.sets_count, Struct(
