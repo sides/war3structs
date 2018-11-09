@@ -92,32 +92,26 @@ TechAvalabilityChange = Struct(
 )
 
 RandomUnitTable = Struct(
-  "random_unit_groups_count" / Integer,
-  "random_unit_groups" / Array(this.random_unit_groups_count, Struct(
-    "number" / Integer,
-    "name" / String,
-    "positions_count" / Integer,
-    "positions" / Integer[this.positions_count],
-    "units_count" / Integer,
-    "units" / Array(this.units_count, Struct(
-      "chance_percent" / Integer,
-      "position_ids" / Byte[this._.positions_count * 4]
-    ))
+  "number" / Integer,
+  "name" / String,
+  "positions_count" / Integer,
+  "positions" / Integer[this.positions_count],
+  "units_count" / Integer,
+  "units" / Array(this.units_count, Struct(
+    "chance_percent" / Integer,
+    "position_ids" / Byte[this._.positions_count * 4]
   ))
 )
 
 RandomItemTable = Struct(
-  "random_item_tables_count" / Integer,
-  "random_item_tables" / Array(this.random_item_tables_count, Struct(
-    "number" / Integer,
-    "name" / String,
-    "sets_count" / Integer,
-    "sets" / Array(this.sets_count, Struct(
-      "items_count" / Integer,
-      "items" / Array(this.items_count, Struct(
-        "chance_percent" / Integer,
-        "item_id" / Byte[4]
-      ))
+  "number" / Integer,
+  "name" / String,
+  "sets_count" / Integer,
+  "sets" / Array(this.sets_count, Struct(
+    "items_count" / Integer,
+    "items" / Array(this.items_count, Struct(
+      "chance_percent" / Integer,
+      "item_id" / Byte[4]
     ))
   ))
 )
