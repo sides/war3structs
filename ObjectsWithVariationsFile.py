@@ -3,6 +3,7 @@ from structs.common import *
 
 """
   Formats: w3d, w3a, w3q
+  Version: 1
 
   The objects with variations file is exactly the same as the objects
   file, but contains a variation parameter to specify what level of the

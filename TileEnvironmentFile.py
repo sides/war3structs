@@ -3,6 +3,7 @@ from structs.common import *
 
 """
   Formats: w3e
+  Version: 11
 
   The tile environment file contains the map's tile and cliff data.
 """

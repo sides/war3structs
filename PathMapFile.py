@@ -3,6 +3,7 @@ from structs.common import *
 
 """
   Formats: wpm
+  Version: 0
 
   The path map file describes the pathing in a map.
 """

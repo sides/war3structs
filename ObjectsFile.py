@@ -3,6 +3,7 @@ from structs.common import *
 
 """
   Formats: w3u, w3t, w3b, w3h
+  Version: 1
 
   The objects file contains data that the object editor would typically
   manipulate. If dealing with abilities, doodads or upgrades, the

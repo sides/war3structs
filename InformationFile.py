@@ -3,6 +3,7 @@ from structs.common import *
 
 """
   Formats: w3i
+  Version: 25
 
   The information file contains information about the map presented in
   a game lobby before the game starts, as well as the map's global unit
