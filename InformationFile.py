@@ -104,7 +104,9 @@ RandomUnitTable = Struct(
   "units_count" / Integer,
   "units" / Array(this.units_count, Struct(
     "chance_percent" / Integer,
-    "unit_ids" / Byte[this._.positions_count * 4]
+    "unit_ids" / Byte[this._.positions_count * 4] # this can use the "random id" type of id
+                                                  # see the UnitDoodadRandomUnit struct in
+                                                  # UnitDoodadsFile for details
   ))
 )
 
@@ -116,7 +118,9 @@ RandomItemTable = Struct(
     "items_count" / Integer,
     "items" / Array(this.items_count, Struct(
       "chance_percent" / Integer,
-      "item_id" / Byte[4]
+      "item_id" / Byte[4] # this can use the "random item id" type of id
+                          # see the UnitDoodadRandomUnit struct in
+                          # UnitDoodadsFile for details
     ))
   ))
 )
