@@ -5,7 +5,7 @@ from structs.common import *
   Formats: w3i
   Version: 25
 
-  The information file contains information about the map presented in
+  The metadata file contains information about the map presented in
   a game lobby before the game starts, as well as the map's global unit
   and item tables (referenced by other formats).
 """
@@ -125,7 +125,7 @@ RandomItemTable = Struct(
   ))
 )
 
-InformationFile = Struct(
+MetadataFile = Struct(
   "version" / Integer,
   "number_of_saves" / Integer,
   "editor_version" / Integer,
