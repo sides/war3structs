@@ -5,7 +5,7 @@ from structs.common import *
   Formats: w3e
   Version: 11
 
-  The tile environment file contains the map's tile and cliff data.
+  The tile map file contains the map's tile and cliff data.
 """
 
 TilePoint = Bitwise(Struct(
@@ -24,7 +24,7 @@ TilePoint = Bitwise(Struct(
   "layer_height" / Nibble
 ))
 
-TileEnvironmentFile = Struct(
+TileMapFile = Struct(
   "file_id" / Const(b"W3E!"),
   "version" / Integer,
   "tileset_id" / TilesetEnum,
