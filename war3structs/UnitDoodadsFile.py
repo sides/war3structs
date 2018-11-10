@@ -108,7 +108,7 @@ UnitDoodad = Struct(
   "inventory_items" / Array(this.inventory_items_count, UnitDoodadInventoryItem),
   "ability_modifications_count" / Integer,
   "ability_modifications" / Array(this.ability_modifications_count, UnitDoodadAbilityModification),
-  "random_unit" / IfThenElse(lambda ctx: ctx.unit_id == b"uDNR" or ctx.unit_id == b"bDNR" or ctx.unit_id == b"iDNR",
+  "random_unit" / IfThenElse(lambda ctx: ctx.unit_id in [b"uDNR", b"bDNR", b"iDNR"],
     UnitDoodadRandomUnit,
     Sequence(Const(0, Integer), Const(1, Integer))
   ),
