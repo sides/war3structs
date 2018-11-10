@@ -8,6 +8,8 @@ from war3structs.common import *
   The sounds file contains the sound definitions in a map.
 """
 
+# strings can be "", integers can be -1 and floats can be 0x4F800000
+# for "unset" values (uses default)
 Sound = Struct(
   "variable" / String,
   "file_path" / String,
@@ -29,11 +31,12 @@ Sound = Struct(
   ),
   "fade_in_rate" / Integer,
   "fade_out_rate" / Integer,
-  "volume" / Integer, # -1 for default
+  "volume" / Integer,
   "pitch" / Float,
   "unknown_value_1" / Float, # ?
   "unknown_value_2" / Integer, # ? (-1 or 8)
   "channel" / Enum(Integer,
+    UNSET = -1,
     GENERAL = 0,
     UNIT_SELECTION = 1,
     UNIT_ACKNOWLEDGEMENT = 2,
@@ -56,9 +59,9 @@ Sound = Struct(
   "unknown_value_3" / Float, # ?
   "unknown_value_4" / Float, # ?
   "unknown_value_5" / Integer, # ? (-1 or 127)
-  "unknown_value_6" / Float,
-  "unknown_value_7" / Float,
-  "unknown_value_8" / Float
+  "unknown_value_6" / Float, # ?
+  "unknown_value_7" / Float, # ?
+  "unknown_value_8" / Float # ?
 )
 
 SoundsFile = Struct(
