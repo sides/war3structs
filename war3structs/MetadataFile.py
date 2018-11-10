@@ -1,5 +1,5 @@
 from construct import *
-from structs.common import *
+from war3structs.common import *
 
 """
   Formats: w3i

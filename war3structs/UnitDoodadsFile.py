@@ -1,6 +1,6 @@
 from construct import *
-from structs.common import *
-from structs.DoodadsFile import DoodadVisibilityFlags, DoodadItemSet
+from war3structs.common import *
+from war3structs.DoodadsFile import DoodadVisibilityFlags, DoodadItemSet
 
 """
   Formats: doo
