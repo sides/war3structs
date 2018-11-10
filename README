@@ -35,3 +35,12 @@ Files are Structs and come with parsing and building options as per the
 construct package.
 
 Read more about construct: https://github.com/construct/construct
+
+
+Status
+-----------------
+
+The formats are loosely tested or barely tested at all, especially as
+far as building goes. It also currently only supports formats inside
+map archives, not the other pack formats such as artificial
+intelligence, campaign and replay files.
