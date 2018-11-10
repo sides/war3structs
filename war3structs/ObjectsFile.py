@@ -10,21 +10,25 @@ from war3structs.common import *
   ObjectsWithVariationsFile is used instead.
 """
 
+class ObjectModificationParentIdValidator(Validator):
+  def _validate(self, obj, ctx, path):
+    return obj in [ctx._.new_object_id, ctx._.original_object_id]
+
 ObjectModification = Struct(
-  "modification_id" / Byte[4],
+  "modification_id" / ByteId,
   "variable_type" / Enum(Integer, INT=0, REAL=1, UNREAL=2, STRING=3),
-  "value" / Switch(this.variable_type.type, {
+  "value" / Switch(this.variable_type, {
     "INT" : Integer,
     "REAL" : Float,
     "UNREAL" : Float,
     "STRING" : String
   }),
-  "end" / Integer
+  "modification_parent_id" / Select(Const(0, Integer), ObjectModificationParentIdValidator(ByteId))
 )
 
 ObjectDefinition = Struct(
-  "original_object_id" / Byte[4],
-  "new_object_id" / Byte[4],
+  "original_object_id" / ByteId,
+  "new_object_id" / ByteId,
   "modifications_count" / Integer,
   "modifications" / Array(this.modifications_count, ObjectModification)
 )

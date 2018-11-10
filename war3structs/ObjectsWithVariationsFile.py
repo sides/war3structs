@@ -1,5 +1,6 @@
 from construct import *
 from war3structs.common import *
+from war3structs.ObjectsFile import ObjectModificationParentIdValidator
 
 """
   Formats: w3d, w3a, w3q
@@ -11,33 +12,33 @@ from war3structs.common import *
 """
 
 ObjectModificationWithVariation = Struct(
-  "modification_id" / Byte[4],
+  "modification_id" / ByteId,
   "variable_type" / Enum(Integer, INT=0, REAL=1, UNREAL=2, STRING=3),
   "variation" / Integer,
-  "value" / Switch(this.variable_type.type, {
+  "ability_data_column" / Enum(Integer, A=0, B=1, C=2, D=3, F=4, G=5, H=6),
+  "value" / Switch(this.variable_type, {
     "INT" : Integer,
     "REAL" : Float,
     "UNREAL" : Float,
     "STRING" : String
   }),
-  "ability_pointer" / Integer,
-  "end" / Integer
+  "modification_parent_id" / Select(Const(0, Integer), ObjectModificationParentIdValidator(ByteId))
 )
 
-ObjectDefinitionWithVariation = Struct(
-  "original_object_id" / Byte[4],
-  "new_object_id" / Byte[4],
+ObjectDefinitionWithVariations = Struct(
+  "original_object_id" / ByteId,
+  "new_object_id" / ByteId,
   "modifications_count" / Integer,
   "modifications" / Array(this.modifications_count, ObjectModificationWithVariation)
 )
 
-ObjectTableWithVariation = Struct(
+ObjectTableWithVariations = Struct(
   "objects_count" / Integer,
-  "objects" / Array(this.objects_count, ObjectDefinitionWithVariation)
+  "objects" / Array(this.objects_count, ObjectDefinitionWithVariations)
 )
 
 ObjectsWithVariationsFile = Struct(
   "version" / Integer,
-  "original_objects_table" / ObjectTableWithVariation,
-  "custom_objects_table" / ObjectTableWithVariation
+  "original_objects_table" / ObjectTableWithVariations,
+  "custom_objects_table" / ObjectTableWithVariations
 )
