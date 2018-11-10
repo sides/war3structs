@@ -1,5 +1,5 @@
 from construct import *
-from war3structs.common import *
+from .common import *
 
 """
   Formats: w3u, w3t, w3b, w3h

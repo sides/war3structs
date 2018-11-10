@@ -1,5 +1,5 @@
 from construct import *
-from war3structs.common import *
+from .common import *
 
 """
   Formats: w3i
@@ -8,37 +8,6 @@ from war3structs.common import *
   The metadata file contains information about the map presented in
   a game lobby before the game starts, as well as the map's global unit
   and item tables (referenced by other formats).
-"""
-
-"""
-This snippet below doesn't actually work because using players_count
-means if the included player ids aren't perfectly linear (0-11, rather
-than 0-4 + 6-11 + 14-15, for example) then it will skip certain players.
-We can't detect the current players either because processing will be
-done before all the players have been added, since ally priorities are
-a player flag field on the player struct itself.
-
-def get_player_flags_enum(ctx):
-  # It's already been set, return immediately.
-  if player_flags.flags:
-    return True
-
-  if not ctx._root.players_count:
-    return False
-
-  for i in range(0, ctx._root.players_count):
-    player_flags.flags["Player%02d" % i] = 2 ** i
-
-  return True
-
-# Hack for a dynamic field here. player_flags is empty until
-# player_flags_cond is used at least once. player_flags_cond will
-# either process and then return player_flags or return player_flags
-# immediately. It falls back on just an int. It would be better if
-# construct had a type that's just a plain lambda, but I didn't figure
-# out if it's possible.
-player_flags = FlagsEnum(Integer)
-player_flags_cond = IfThenElse(get_player_flags_enum, player_flags, Integer)
 """
 
 PlayerFlags = FlagsEnum(Integer)

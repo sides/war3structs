@@ -1,5 +1,5 @@
 from construct import *
-from war3structs.common import *
+from .common import *
 
 """
   Formats: mmp

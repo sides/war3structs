@@ -1,6 +1,6 @@
 from construct import *
-from war3structs.common import *
-from war3structs.ObjectsFile import ObjectModificationParentIdValidator
+from .common import *
+from .objects import ObjectModificationParentIdValidator
 
 """
   Formats: w3d, w3a, w3q
