@@ -23,7 +23,7 @@ ObjectModification = Struct(
     "UNREAL" : Float,
     "STRING" : String
   }),
-  "modification_parent_id" / Select(Const(0, Integer), ObjectModificationParentIdValidator(ByteId))
+  "parent_object_id" / Select(Const(0, Integer), ObjectModificationParentIdValidator(ByteId))
 )
 
 ObjectDefinition = Struct(
