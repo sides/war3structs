@@ -1,1 +1,37 @@
-TBD
+war3structs
+-----------------
+
+Python construct definitions for Warcraft III file formats.
+
+
+Usage
+-----------------
+
+Structures are located in war3structs/ and come with full structures
+for files themselves (inside e.g. a map archive). Example:
+
+  >>> from war3structs import CamerasFile
+  >>> with open("./war3map.w3c", "rb") as data:
+  ...   cameras = CamerasFile.parse_stream(data)
+  ...   print(cameras)
+  ...
+  Container:
+      version = 0
+      cameras_count = 1
+      cameras = ListContainer:
+          Container:
+              target_x = 100
+              target_y = 100
+              offset_z = 0.0
+              rotation = 90.0
+              angle_of_attack = 304.0
+              distance = 2000.0
+              roll = 0.0
+              field_of_view = 70.0
+              far_clipping = 5000.0
+              name = u'myCamera' (total 8)
+
+Files are Structs and come with parsing and building options as per the
+construct package.
+
+Read more about construct: https://github.com/construct/construct
