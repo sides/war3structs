@@ -11,8 +11,8 @@ from war3structs.common import *
 MinimapIcon = Struct(
   "type" / Enum(Integer,
     GOLDMINE = 0,
-    SHOP     = 1,
-    PLAYER   = 2
+    SHOP = 1,
+    PLAYER = 2
   ),
   "coord_x" / Integer, # can be 16-240
   "coord_y" / Integer, # can be 16-240

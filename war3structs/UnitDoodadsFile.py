@@ -24,20 +24,20 @@ UnitDoodadAbilityModification = Struct(
 )
 
 UnitDoodadRandomItemClass = Enum(Byte,
-  ANY_CLASS     = 0,
-  PERMANENT     = 1,
-  CHARGED       = 2,
-  POWER_UP      = 3,
-  ARTIFACT      = 4,
-  PURCHASABLE   = 5,
-  CAMPAIGN      = 6,
+  ANY_CLASS = 0,
+  PERMANENT = 1,
+  CHARGED = 2,
+  POWER_UP = 3,
+  ARTIFACT = 4,
+  PURCHASABLE = 5,
+  CAMPAIGN = 6,
   MISCELLANEOUS = 7
 )
 
 UnitDoodadRandomUnit = Struct(
   "type" / Enum(Integer,
-    ANY               = 0,
-    FROM_MAP_TABLE    = 1,
+    ANY = 0,
+    FROM_MAP_TABLE = 1,
     FROM_CUSTOM_TABLE = 2
   ),
   "properties" / Switch(this.type, {

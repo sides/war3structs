@@ -49,15 +49,15 @@ for i in range(0, 23):
 Player = Struct(
   "id" / Integer,
   "type" / Enum(Integer,
-    USER      = 1,
-    COMPUTER  = 2,
-    NEUTRAL   = 3,
+    USER = 1,
+    COMPUTER = 2,
+    NEUTRAL = 3,
     RESCUABLE = 4
   ),
   "race" / Enum(Integer,
-    HUMAN    = 1,
-    ORC      = 2,
-    UNDEAD   = 3,
+    HUMAN = 1,
+    ORC = 2,
+    UNDEAD = 3,
     NIGHTELF = 4
   ),
   "fixed_start_position" / Integer,
@@ -97,9 +97,9 @@ RandomUnitTable = Struct(
   "name" / String,
   "positions_count" / Integer,
   "positions" / Array(this.positions_count, Enum(Integer,
-    UNITS     = 0,
+    UNITS = 0,
     BUILDINGS = 1,
-    ITEMS     = 2
+    ITEMS = 2
   )),
   "units_count" / Integer,
   "units" / Array(this.units_count, Struct(

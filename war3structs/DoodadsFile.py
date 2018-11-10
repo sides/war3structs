@@ -21,9 +21,9 @@ DoodadItemSet = Struct(
 
 DoodadVisibilityFlags = Enum(Byte,
   INVISIBLE_NONSOLID = 0,
-  VISIBLE_NONSOLID   = 1,
-  VISIBLE_SOLID      = 2,
-  OUT_OF_BOUNDS      = 3 # ?
+  VISIBLE_NONSOLID = 1,
+  VISIBLE_SOLID = 2,
+  OUT_OF_BOUNDS = 3 # ?
 )
 
 Doodad = Struct(
