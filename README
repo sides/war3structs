@@ -44,3 +44,12 @@ The formats are loosely tested or barely tested at all, especially as
 far as building goes. It also currently only supports formats inside
 map archives, not the other pack formats such as artificial
 intelligence, campaign and replay files.
+
+I also believe it to be likely that these formats will be updated for
+Warcraft 3 Reforged. So, TODO: Add some interface to work with
+different patches. A patch will use different data as far as
+TriggerData.txt goes (triggers) and as far as the versions of the
+formats go. Alternatively don't bother with this at all and just keep
+the formats updated to the latest patch (fingers crossed for official
+docs) and let people worry about using the correctly tagged release on
+git depending on their specs.
