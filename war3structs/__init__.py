@@ -5,8 +5,7 @@ from .imports import ImportsFile
 from .map import MapFile
 from .metadata import MetadataFile
 from .minimapicons import MinimapIconsFile
-from .objects import ObjectsFile
-from .objectswithvariations import ObjectsWithVariationsFile
+from .objects import ObjectsFile, ObjectsWithVariationsFile, ObjectsBestFitFile
 from .pathmap import PathMapFile
 from .regions import RegionsFile
 from .shadowmap import ShadowMapFile
