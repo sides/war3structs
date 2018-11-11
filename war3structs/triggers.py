@@ -27,7 +27,7 @@ TriggerVariable = Struct(
 )
 
 TriggerBlockType = Enum(Integer, EVENT=0, CONDITION=1, ACTION=2, FUNCTION_CALL=3)
-TriggerBlockParameterSet = Array(lambda ctx: trigger_data_function_parameter_counts[ctx.function_name], LazyBound(lambda: TriggerBlockParameter))
+TriggerBlockParameterSet = Array(lambda ctx: functions_parameter_counts[ctx.function_name], LazyBound(lambda: TriggerBlockParameter))
 
 TriggerBlockParameter = Struct(
   "type" / Enum(Integer, PRESET=0, VARIABLE=1, FUNCTION=2, CONSTANT=3),
