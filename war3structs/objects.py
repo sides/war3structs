@@ -14,9 +14,9 @@ from .common import *
   should be really bad on this.
 """
 
-class ObjectModificationParentIdValidator(Validator):
+class ObjectModificationTerminatorValidator(Validator):
   def _validate(self, obj, ctx, path):
-    return obj in [ctx._.new_object_id, ctx._.original_object_id]
+    return obj in [b"\x00\x00\x00\x00", ctx._.new_object_id, ctx._.original_object_id]
 
 ObjectModification = Struct(
   "modification_id" / ByteId,
@@ -27,7 +27,7 @@ ObjectModification = Struct(
     "UNREAL" : Float,
     "STRING" : String
   }),
-  "parent_object_id" / Select(Const(0, Integer), ObjectModificationParentIdValidator(ByteId))
+  "parent_object_id" / ObjectModificationTerminatorValidator(ByteId)
 )
 
 ObjectDefinition = Struct(
@@ -59,7 +59,7 @@ ObjectModificationWithVariation = Struct(
     "UNREAL" : Float,
     "STRING" : String
   }),
-  "parent_object_id" / Select(Const(0, Integer), ObjectModificationParentIdValidator(ByteId))
+  "parent_object_id" / ObjectModificationTerminatorValidator(ByteId)
 )
 
 ObjectDefinitionWithVariations = Struct(
