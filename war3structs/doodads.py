@@ -13,8 +13,7 @@ DoodadItemSet = Struct(
   "items_count" / Integer,
   "items" / Array(this.items_count, Struct(
     "item_id" / ByteId, # this can use the "random item id" type of id
-                        # see the UnitDoodadRandomUnit struct in
-                        # UnitDoodadsFile for details
+                        # see the UnitDoodadRandomUnit struct
     "chance_percent" / Integer
   ))
 )
