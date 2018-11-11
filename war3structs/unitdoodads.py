@@ -90,8 +90,8 @@ UnitDoodad = Struct(
   "scale_z" / Float,
   "visibility" / DoodadVisibilityFlags,
   "owner_player_id" / Integer,
-  "unknown_property_1" / Byte,
-  "unknown_property_2" / Byte,
+  "unknown_field_1" / Byte,
+  "unknown_field_2" / Byte,
   "hitpoints" / Integer, # -1 for default
   "manapoints" / Integer, # -1 for default, 0 if the unit has no mana
   "dropped_item_table_index" / Integer, # -1 for no item drop from the map item tables

@@ -33,8 +33,8 @@ Sound = Struct(
   "fade_out_rate" / Integer,
   "volume" / Integer,
   "pitch" / Float,
-  "unknown_value_1" / Float, # ?
-  "unknown_value_2" / Integer, # ? (-1 or 8)
+  "unknown_field_1" / Float, # ?
+  "unknown_field_2" / Integer, # ? (-1 or 8)
   "channel" / Enum(Integer,
     UNSET = -1,
     GENERAL = 0,
@@ -56,12 +56,12 @@ Sound = Struct(
   "distance_min" / Float,
   "distance_max" / Float,
   "distance_cutoff" / Float,
-  "unknown_value_3" / Float, # ?
-  "unknown_value_4" / Float, # ?
-  "unknown_value_5" / Integer, # ? (-1 or 127)
-  "unknown_value_6" / Float, # ?
-  "unknown_value_7" / Float, # ?
-  "unknown_value_8" / Float # ?
+  "unknown_field_3" / Float, # ?
+  "unknown_field_4" / Float, # ?
+  "unknown_field_5" / Integer, # ? (-1 or 127)
+  "unknown_field_6" / Float, # ?
+  "unknown_field_7" / Float, # ?
+  "unknown_field_8" / Float # ?
 )
 
 SoundsFile = Struct(

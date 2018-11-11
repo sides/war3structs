@@ -19,7 +19,7 @@ TriggerCategory = Struct(
 TriggerVariable = Struct(
   "name" / String,
   "type" / String,
-  "unknown_integer" / Integer, # always 1?
+  "unknown_field_1" / Integer, # always 1?
   "is_array" / Integer,
   "array_size" / Integer,
   "is_initialized" / Integer,
@@ -75,7 +75,7 @@ TriggersFile = Struct(
   "version" / Integer,
   "trigger_categories_count" / Integer,
   "trigger_categories" / Array(this.trigger_categories_count, TriggerCategory),
-  "unknown_integer" / Integer, # ?
+  "unknown_field_1" / Integer, # ?
   "trigger_variables_count" / Integer,
   "trigger_variables" / Array(this.trigger_variables_count, TriggerVariable),
   "triggers_count" / Integer,

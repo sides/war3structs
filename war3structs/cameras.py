@@ -18,7 +18,7 @@ Camera = Struct(
   "roll" / Float,
   "field_of_view" / Float, # in degrees
   "far_clipping" / Float,
-  "unknown" / Float, # ? (usually 100)
+  "unknown_field_1" / Float, # ? (usually 100)
   "name" / String
 )
 
