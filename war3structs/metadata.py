@@ -12,7 +12,7 @@ from .common import *
 
 PlayerFlags = FlagsEnum(Integer)
 
-for i in range(0, 23):
+for i in range(0, 24):
   PlayerFlags.flags["player_%d" % i] = 2 ** i
 
 Player = Struct(
@@ -51,14 +51,14 @@ Force = Struct(
 
 UpgradeAvailabilityChange = Struct(
   "flags" / PlayerFlags,
-  "upgrade_id" / Byte[4],
+  "upgrade_id" / ByteId,
   "level_changed" / Integer,
   "availability" / Integer
 )
 
 TechAvalabilityChange = Struct(
   "flags" / PlayerFlags,
-  "tech_id" / Byte[4]
+  "tech_id" / ByteId
 )
 
 RandomUnitTable = Struct(
@@ -87,7 +87,7 @@ RandomItemTable = Struct(
     "items_count" / Integer,
     "items" / Array(this.items_count, Struct(
       "chance_percent" / Integer,
-      "item_id" / Byte[4] # this can use the "random item id" type of id
+      "item_id" / ByteId  # this can use the "random item id" type of id
                           # see the UnitDoodadRandomUnit struct for details
     ))
   ))
@@ -122,7 +122,7 @@ MetadataFile = Struct(
   "terrain_fog_end_z" / Float,
   "terrain_fog_density" / Float,
   "terrain_fog_color" / Color,
-  "global_weather_id" / Byte[4],
+  "global_weather_id" / ByteId,
   "custom_sound_environment" / String,
   "custom_light_environment_tileset_id" / TilesetEnum,
   "water_color" / Color,
