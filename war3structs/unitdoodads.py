@@ -42,7 +42,7 @@ UnitDoodadRandomUnit = Struct(
   ),
   "properties" / Switch(this.type, {
     "ANY" : Struct(
-      "level" / Byte[3], # -1 = any level
+      "level" / Int24sl, # -1 = any level, also it's a 24bit integer
       "item_class" / UnitDoodadRandomItemClass
     ),
     "FROM_MAP_TABLE" : Struct(
