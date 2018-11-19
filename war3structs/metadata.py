@@ -1,5 +1,7 @@
 from construct import *
 from .common import *
+from .map import MapFlags
+from .tilemap import TilesetEnum
 
 """
   Formats: w3i

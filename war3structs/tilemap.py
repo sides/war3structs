@@ -8,6 +8,27 @@ from .common import *
   The tile map file contains the map's tile and cliff data.
 """
 
+TilesetEnum = Enum(Byte,
+  ASHENVALE       = ord("A"),
+  BARRENS         = ord("B"),
+  FELWOOD         = ord("C"),
+  DUNGEON         = ord("D"),
+  LORDAERONFALL   = ord("F"),
+  UNDERGROUND     = ord("G"),
+  LORDAERONSUMMER = ord("L"),
+  NORTHREND       = ord("N"),
+  VILLAGEFALL     = ord("Q"),
+  VILLAGE         = ord("V"),
+  LORDAERONWINTER = ord("W"),
+  DALARAN         = ord("X"),
+  CITYSCAPE       = ord("Y"),
+  SUNKENRUINS     = ord("Z"),
+  ICECROWN        = ord("I"),
+  DALARANRUINS    = ord("J"),
+  OUTLAND         = ord("O"),
+  BLACKCITADEL    = ord("K")
+)
+
 TilePoint = Bitwise(Struct(
   "ground_height" / Bytewise(Short),
   "water_level" / Bytewise(Short),
