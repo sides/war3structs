@@ -8,5 +8,5 @@ from .common import *
 """
 
 ShadowMapFile = Struct(
-  "shadow_map" / GreedyRange(Flag) # the size of the file should be 16*width*height of the tilemap
+  "shadow_map" / GreedyRange(BooleanAdapter(Byte, 0x00, 0xFF)) # the size of the file should be 16*width*height of the tilemap
 )

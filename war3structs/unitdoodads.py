@@ -19,7 +19,7 @@ UnitDoodadInventoryItem = Struct(
 
 UnitDoodadAbilityModification = Struct(
   "ability_id" / ByteId,
-  "is_active" / Integer, # for autocast abilities
+  "is_active" / IntegerBoolean, # for autocast abilities
   "level" / Integer
 )
 

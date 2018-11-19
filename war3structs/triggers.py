@@ -13,16 +13,16 @@ from .patch.triggerdata import functions_parameter_counts
 TriggerCategory = Struct(
   "index" / Integer,
   "name" / String,
-  "is_comment" / Integer
+  "is_comment" / IntegerBoolean
 )
 
 TriggerVariable = Struct(
   "name" / String,
   "type" / String,
   "unknown_field_1" / Integer, # always 1?
-  "is_array" / Integer,
+  "is_array" / IntegerBoolean,
   "array_size" / Integer,
-  "is_initialized" / Integer,
+  "is_initialized" / IntegerBoolean,
   "initial_value" / String
 )
 
@@ -42,7 +42,7 @@ TriggerIfThenElseBlock = Struct(
   "type" / TriggerBlockType,
   "branch_type" / Enum(Integer, IF=0, THEN=1, ELSE=2),
   "function_name" / String,
-  "is_function_enabled" / Integer,
+  "is_function_enabled" / IntegerBoolean,
   "parameters" / TriggerBlockParameterSet,
   "child_blocks_count" / Integer,
   "child_blocks" / Array(this.child_blocks_count, LazyBound(lambda: Select(TriggerIfThenElseBlock, TriggerBlock)))
@@ -51,7 +51,7 @@ TriggerIfThenElseBlock = Struct(
 TriggerBlock = Struct(
   "type" / TriggerBlockType,
   "function_name" / String,
-  "is_function_enabled" / Integer,
+  "is_function_enabled" / IntegerBoolean,
   "parameters" / TriggerBlockParameterSet,
   "child_blocks_count" / Integer,
   "child_blocks" / Array(this.child_blocks_count, LazyBound(lambda: Select(TriggerIfThenElseBlock, TriggerBlock)))
@@ -60,11 +60,11 @@ TriggerBlock = Struct(
 Trigger = Struct(
   "name" / String,
   "description" / String,
-  "is_comment" / Integer,
-  "is_enabled" / Integer,
-  "is_custom_text_trigger" / Integer,
-  "is_turned_off" / Integer,
-  "is_init" / Integer,
+  "is_comment" / IntegerBoolean,
+  "is_enabled" / IntegerBoolean,
+  "is_custom_text_trigger" / IntegerBoolean,
+  "is_turned_off" / IntegerBoolean,
+  "is_init" / IntegerBoolean,
   "category_index" / Integer,
   "blocks_count" / Integer,
   "blocks" / Array(this.blocks_count, TriggerBlock)
