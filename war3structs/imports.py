@@ -9,7 +9,7 @@ from .common import *
 """
 
 Import = Struct(
-  "is_custom_path" / Byte, # 5 or 8 for no, 10 or 13 for yes
+  "is_custom_path" / BooleanAdapter(Byte, [8, 5], [13, 10]), # 5 or 8 for no, 10 or 13 for yes
   "path" / String
 )
 
