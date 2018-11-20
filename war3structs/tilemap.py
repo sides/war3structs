@@ -58,5 +58,5 @@ TileMapFile = Struct(
   "tile_map_height" / Integer,
   "tile_map_center_offset_x" / Float,
   "tile_map_center_offset_y" / Float,
-  "tile_map" / Array(this.map_width * this.map_height, TilePoint)
+  "tile_map" / Array(this.tile_map_width * this.tile_map_height, TilePoint)
 )
