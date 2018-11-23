@@ -37,6 +37,34 @@ construct package.
 Read more about construct: https://github.com/construct/construct
 
 
+Plaintext
+-----------------
+
+It also comes with some support for the plaintext formats, such as
+JASS, using a Lark parser. Example:
+
+  >>> from war3structs.jass import JassParser
+  >>> with open("./war3map.j", "r") as data:
+  ...   contents = data.read()
+  ...   ast = JassParser.parse(contents)
+  ...   print(ast.pretty())
+  start
+    globals
+      globals
+
+
+      global_var_declr
+        integer
+        myvar
+        =
+        expr      0
+
+
+      endglobals
+
+Read more about Lark: https://github.com/lark-parser/lark
+
+
 Status
 -----------------
 

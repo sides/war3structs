@@ -51,17 +51,16 @@ grammar = """
   TYPE    : ID | CODE | HANDLE | INTEGER | REAL | BOOLEAN | STRING
 
   // Constants
-  CONST           : REAL_CONST | INT_CONST_HEX | INT_CONST_OCT | INT_CONST_DEC | INT_LITERAL | BOOL_CONST | STRING_LITERAL | NULL_CONST
-  INT_CONST_DEC   : "0" | "1".."9" ("0".."9")*
-  INT_CONST_OCT   : "0" ("0".."7")+
-  INT_CONST_HEX   : "$" ("0".."9"|"a".."f"|"A".."F")+ | "0" ("x"|"X") ("0".."9"|"a".."f"|"A".."F")+
-  REAL_CONST      : ("0".."9")+ "." ("0".."9")* | "." ("0".."9")+
-  BOOL_CONST      : "true" | "false"
-  NULL_CONST      : "null"
+  INT_CONST_DEC.5 : "0" | "1".."9" ("0".."9")*
+  INT_CONST_OCT.6 : "0" ("0".."7")+
+  INT_CONST_HEX.7 : "$" ("0".."9"|"a".."f"|"A".."F")+ | "0" ("x"|"X") ("0".."9"|"a".."f"|"A".."F")+
+  REAL_CONST.8    : ("0".."9")+ "." ("0".."9")* | "." ("0".."9")+
+  BOOL_CONST.3    : "true" | "false"
+  NULL_CONST.1    : "null"
 
   // Literals
-  STRING_LITERAL  : "\\"" ("\\\\\\""|"\\\\\\\\"|/[^"]/)* "\\""
-  INT_LITERAL     : "'" /[^']*/ "'"
+  STRING_LITERAL.2 : "\\"" ("\\\\\\""|"\\\\\\\\"|/[^"]/)* "\\""
+  INT_LITERAL.4    : "'" /[^']*/ "'"
 
   // Operators
   PLUS    : "+"
@@ -139,7 +138,7 @@ grammar = """
 
   // Expressions
 
-  expr      : binary_op | unary_op | func_call | array_ref | func_ref | ID | CONST | parens
+  expr      : binary_op | unary_op | func_call | array_ref | func_ref | ID | _const | parens
 
   binary_op : expr (PLUS | MINUS | TIMES | DIVIDE | EQ | NE | LT | GT | LE | GE | AND | OR) expr
 
@@ -150,6 +149,8 @@ grammar = """
   array_ref : ID LBRACKET expr RBRACKET
 
   func_ref  : FUNCTION ID
+
+  _const    : REAL_CONST | INT_CONST_HEX | INT_CONST_OCT | INT_CONST_DEC | INT_LITERAL | BOOL_CONST | STRING_LITERAL | NULL_CONST
 
   parens    : LPARENS expr RPARENS
 
@@ -162,4 +163,4 @@ grammar = """
   %ignore WHITESPACE
 """
 
-JassProgram = Lark(grammar, parser="lalr")
+JassParser = Lark(grammar, parser="lalr")
