@@ -1,174 +1,250 @@
-from lark import Lark
+from lark import Lark, Tree as BaseTree
 
 """
   Formats: j
 
   This is a plain text parser for creating an AST out of JASS code, NOT
-  a binary format parser. It uses Lark, not construct. The grammar is
-  in Lark's EBNF-like syntax, but is pretty self-explanatory.
+  a binary format parser. It is based on Lark instead of construct. The
+  grammar is in Lark's EBNF-like syntax and is pretty self-explanatory.
+  The parser is able to do some extra things from what Lark can do,
+  including parsing comments and reconstructing a script, providing
+  similar features to our other constructs.
 """
 
-grammar = """
-  //-------------------------------------------------------------------
-  // Terminals
-  //-------------------------------------------------------------------
+class Tree(BaseTree):
+  pass
 
-  // Keywords
-  CODE        : "code"
-  HANDLE      : "handle"
-  INTEGER     : "integer"
-  REAL        : "real"
-  BOOLEAN     : "boolean"
-  STRING      : "string"
-  ARRAY       : "array"
-  GLOBALS     : "globals"
-  ENDGLOBALS  : "endglobals"
-  CONSTANT    : "constant"
-  NATIVE      : "native"
-  EXTENDS     : "extends"
-  KTYPE       : "type"
-  FUNCTION    : "function"
-  ENDFUNCTION : "endfunction"
-  TAKES       : "takes"
-  RETURNS     : "returns"
-  NOTHING     : "nothing"
-  LOCAL       : "local"
-  RETURN      : "return"
-  SET         : "set"
-  CALL        : "call"
-  LOOP        : "loop"
-  ENDLOOP     : "endloop"
-  EXITWHEN    : "exitwhen"
-  IF          : "if"
-  THEN        : "then"
-  ELSE        : "else"
-  ELSEIF      : "elseif"
-  ENDIF       : "endif"
-  DEBUG       : "debug"
+class JassParser():
+  _grammar = """
+    //-------------------------------------------------------------------
+    // Terminals
+    //-------------------------------------------------------------------
 
-  // Identifier
-  ID      : ("a".."z"|"A".."Z") ("a".."z"|"A".."Z"|"0".."9"|"_")*
-  TYPE    : ID | CODE | HANDLE | INTEGER | REAL | BOOLEAN | STRING
+    // Keywords
+    CODE        : "code"
+    HANDLE      : "handle"
+    INTEGER     : "integer"
+    REAL        : "real"
+    BOOLEAN     : "boolean"
+    STRING      : "string"
+    ARRAY       : "array"
+    GLOBALS     : "globals"
+    ENDGLOBALS  : "endglobals"
+    CONSTANT    : "constant"
+    NATIVE      : "native"
+    EXTENDS     : "extends"
+    KTYPE       : "type"
+    FUNCTION    : "function"
+    ENDFUNCTION : "endfunction"
+    TAKES       : "takes"
+    RETURNS     : "returns"
+    NOTHING     : "nothing"
+    LOCAL       : "local"
+    RETURN      : "return"
+    SET         : "set"
+    CALL        : "call"
+    LOOP        : "loop"
+    ENDLOOP     : "endloop"
+    EXITWHEN    : "exitwhen"
+    IF          : "if"
+    THEN        : "then"
+    ELSE        : "else"
+    ELSEIF      : "elseif"
+    ENDIF       : "endif"
+    DEBUG       : "debug"
 
-  // Constants
-  INT_CONST_DEC.5 : "0" | "1".."9" ("0".."9")*
-  INT_CONST_OCT.6 : "0" ("0".."7")+
-  INT_CONST_HEX.7 : "$" ("0".."9"|"a".."f"|"A".."F")+ | "0" ("x"|"X") ("0".."9"|"a".."f"|"A".."F")+
-  REAL_CONST.8    : ("0".."9")+ "." ("0".."9")* | "." ("0".."9")+
-  BOOL_CONST.3    : "true" | "false"
-  NULL_CONST.1    : "null"
+    // Identifier
+    ID      : ("a".."z"|"A".."Z") ("a".."z"|"A".."Z"|"0".."9"|"_")*
+    TYPE    : ID | CODE | HANDLE | INTEGER | REAL | BOOLEAN | STRING
 
-  // Literals
-  STRING_LITERAL.2 : "\\"" ("\\\\\\""|"\\\\\\\\"|/[^"]/)* "\\""
-  INT_LITERAL.4    : "'" /[^']*/ "'"
+    // Constants
+    INT_CONST_DEC.5 : "0" | "1".."9" ("0".."9")*
+    INT_CONST_OCT.6 : "0" ("0".."7")+
+    INT_CONST_HEX.7 : "$" ("0".."9"|"a".."f"|"A".."F")+ | "0" ("x"|"X") ("0".."9"|"a".."f"|"A".."F")+
+    REAL_CONST.8    : ("0".."9")+ "." ("0".."9")* | "." ("0".."9")+
+    BOOL_CONST.3    : "true" | "false"
+    NULL_CONST.1    : "null"
 
-  // Operators
-  PLUS    : "+"
-  MINUS   : "-"
-  TIMES   : "*"
-  DIVIDE  : "/"
-  OR      : "or"
-  AND     : "and"
-  NOT     : "not"
-  EQ      : "=="
-  NE      : "!="
-  LT      : "<"
-  GT      : ">"
-  LE      : "<="
-  GE      : ">="
+    // Literals
+    STRING_LITERAL.2 : "\\"" ("\\\\\\""|"\\\\\\\\"|/[^"]/)* "\\""
+    INT_LITERAL.4    : "'" /[^']*/ "'"
 
-  // Assignment
-  EQUALS : "="
+    // Operators
+    PLUS    : "+"
+    MINUS   : "-"
+    TIMES   : "*"
+    DIVIDE  : "/"
+    OR      : "or"
+    AND     : "and"
+    NOT     : "not"
+    EQ      : "=="
+    NE      : "!="
+    LT      : "<"
+    GT      : ">"
+    LE      : "<="
+    GE      : ">="
 
-  // Delimiters
-  LPARENS  : "("
-  RPARENS  : ")"
-  LBRACKET : "["
-  RBRACKET : "]"
-  COMMA    : ","
+    // Assignment
+    EQUALS : "="
 
-
-  //-------------------------------------------------------------------
-  // Rules
-  //-------------------------------------------------------------------
-
-  start : NEWLINE* ((type_declr | globals | native_func_declr) NEWLINE)* (func NEWLINE)*
+    // Delimiters
+    LPARENS  : "("
+    RPARENS  : ")"
+    LBRACKET : "["
+    RBRACKET : "]"
+    COMMA    : ","
 
 
-  // Declarations
+    //-------------------------------------------------------------------
+    // Rules
+    //-------------------------------------------------------------------
 
-  type_declr        : KTYPE ID EXTENDS (HANDLE | ID)
-
-  globals           : GLOBALS NEWLINE global_var_declr* ENDGLOBALS
-
-  global_var_declr  : (CONSTANT TYPE ID EQUALS expr NEWLINE | _var_declr NEWLINE)
-
-  native_func_declr : CONSTANT? NATIVE func_declr
-
-  func_declr        : ID TAKES (NOTHING | TYPE ID (COMMA TYPE ID)*) RETURNS (NOTHING | TYPE)
-
-  local_var_declr   : LOCAL _var_declr
-
-  _var_declr        : TYPE ID (EQUALS expr)? | TYPE ARRAY ID
+    start : ((type_declr | globals | native_func_declr) NEWLINE)* (func NEWLINE)*
 
 
-  // Functions
+    // Declarations
 
-  func   : CONSTANT? FUNCTION func_declr NEWLINE locals statements ENDFUNCTION
+    type_declr        : KTYPE ID EXTENDS (HANDLE | ID)
 
-  locals : (local_var_declr NEWLINE)*
+    globals           : GLOBALS NEWLINE global_var_declr* ENDGLOBALS
 
-  args   : expr (COMMA expr)*
+    global_var_declr  : (CONSTANT TYPE ID EQUALS expr NEWLINE | _var_declr NEWLINE)
 
+    native_func_declr : CONSTANT? NATIVE func_declr
 
-  // Statements
+    func_declr        : ID TAKES (NOTHING | TYPE ID (COMMA TYPE ID)*) RETURNS (NOTHING | TYPE)
 
-  statements      : (_statement NEWLINE)*
+    local_var_declr   : LOCAL _var_declr
 
-  loop_statements : (_statement NEWLINE | exitwhen NEWLINE)* -> statements
-
-  _statement      : set | call | ifthenelse | loop | return | debug
-
-  set             : SET ID EQUALS expr | SET ID LBRACKET expr RBRACKET EQUALS expr
-
-  call            : CALL func_call
-
-  ifthenelse      : IF expr THEN NEWLINE statements (ELSEIF expr THEN NEWLINE statements)* (ELSE NEWLINE statements)? ENDIF
-
-  loop            : LOOP NEWLINE loop_statements ENDLOOP
-
-  exitwhen        : EXITWHEN expr
-
-  return          : RETURN expr?
-
-  debug           : DEBUG (set | call | ifthenelse | loop)
+    _var_declr        : TYPE ID (EQUALS expr)? | TYPE ARRAY ID
 
 
-  // Expressions
+    // Functions
 
-  expr           : binary_op | unary_op | func_call | array_ref | func_ref | ID | _const | parens
+    func   : CONSTANT? FUNCTION func_declr NEWLINE locals statements ENDFUNCTION
 
-  binary_op      : expr (PLUS | MINUS | TIMES | DIVIDE | EQ | NE | LT | GT | LE | GE | AND | OR) expr
+    locals : (local_var_declr NEWLINE)*
 
-  unary_op       : (PLUS | MINUS | NOT) expr
-
-  func_call      : ID LPARENS args? RPARENS
-
-  array_ref      : ID LBRACKET expr RBRACKET
-
-  func_ref       : FUNCTION ID
-
-  _const         : REAL_CONST | INT_CONST_HEX | INT_CONST_OCT | INT_CONST_DEC | INT_LITERAL | BOOL_CONST | STRING_LITERAL | NULL_CONST
-
-  parens         : LPARENS expr RPARENS
+    args   : expr (COMMA expr)*
 
 
-  NEWLINE    : /([\\r]?[\\n])+/
-  WHITESPACE : /[ \\t\\f\\r\\n]+/
-  COMMENT    : /\\/\\/[^\\n]*/
+    // Statements
 
-  %ignore COMMENT
-  %ignore WHITESPACE
-"""
+    statements      : (_statement NEWLINE)*
 
-JassParser = Lark(grammar, parser="lalr")
+    loop_statements : (_statement NEWLINE | exitwhen NEWLINE)* -> statements
+
+    _statement      : set | call | ifthenelse | loop | return | debug
+
+    set             : SET ID EQUALS expr | SET ID LBRACKET expr RBRACKET EQUALS expr
+
+    call            : CALL func_call
+
+    ifthenelse      : IF expr THEN NEWLINE statements (ELSEIF expr THEN NEWLINE statements)* (ELSE NEWLINE statements)? ENDIF
+
+    loop            : LOOP NEWLINE loop_statements ENDLOOP
+
+    exitwhen        : EXITWHEN expr
+
+    return          : RETURN expr?
+
+    debug           : DEBUG (set | call | ifthenelse | loop)
+
+
+    // Expressions
+
+    expr           : binary_op | unary_op | func_call | array_ref | func_ref | ID | _const | parens
+
+    binary_op      : expr (PLUS | MINUS | TIMES | DIVIDE | EQ | NE | LT | GT | LE | GE | AND | OR) expr
+
+    unary_op       : (PLUS | MINUS | NOT) expr
+
+    func_call      : ID LPARENS args? RPARENS
+
+    array_ref      : ID LBRACKET expr RBRACKET
+
+    func_ref       : FUNCTION ID
+
+    _const         : REAL_CONST | INT_CONST_HEX | INT_CONST_OCT | INT_CONST_DEC | INT_LITERAL | BOOL_CONST | STRING_LITERAL | NULL_CONST
+
+    parens         : LPARENS expr RPARENS
+
+
+    NEWLINE    : /([\\r]?[\\n])+/
+    WHITESPACE : /[ \\t\\f\\r\\n]+/
+    COMMENT    : /\\/\\/[^\\n]*/
+
+    %ignore COMMENT
+    %ignore WHITESPACE
+  """
+
+  _build_space_before = [
+    'TAKES', 'RETURNS',
+    'THEN',
+    'AND', 'OR'
+  ]
+
+  _build_space_after = [
+    'CONSTANT', 'NATIVE' 'KTYPE', 'TYPE', 'ARRAY',
+    'FUNCTION', 'TAKES', 'RETURNS',
+    'SET', 'CALL', 'LOCAL', 'EXITWHEN', 'DEBUG',
+    'IF', 'ELSEIF', 'ELSE', 'RETURN',
+    'AND', 'OR', 'NOT'
+  ]
+
+  _lark = None
+
+  def _get_lark():
+    if JassParser._lark is None:
+      JassParser._lark = Lark(JassParser._grammar, parser="lalr", tree_class=Tree)
+
+    return JassParser._lark
+
+  def parse(text):
+    """Get the AST of JASS code"""
+
+    return JassParser._get_lark().parse(text)
+
+  def parse_comments(text):
+    """Get comments present in the text by their line numbers"""
+
+    lineno = 1
+    comments = {}
+
+    for line in text.splitlines():
+      comment_index = line.find('//')
+      quote_index = line.find('"')
+
+      if quote_index < comment_index:
+        # Remove the quote in case the // is inside it
+        line = re.sub(r'"(\\"|\\\\|[^"])*"', '', line)
+        comment_index = line.find('//')
+
+      if comment_index != -1:
+        comments[lineno] = line[comment_index:]
+
+      lineno += 1
+
+    return comments
+
+  def build(ast):
+    """Build a JASS script from an AST"""
+
+    stream = io.StringIO('')
+
+    with stream:
+      for token in ast.scan_values(lambda p: True):
+        if token.type == 'NEWLINE':
+          val = '\n'
+        else:
+          if token.type in JassParser._build_space_before:
+            val = ' '
+          else:
+            val = ''
+          val += token.value
+          if token.type in JassParser._build_space_after:
+            val += ' '
+
+        stream.write(val)
+
+      return stream.getvalue()
