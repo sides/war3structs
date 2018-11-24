@@ -48,6 +48,7 @@ JASS, using a Lark parser. Example:
   ...   contents = data.read()
   ...   ast = JassParser.parse(contents)
   ...   print(ast.pretty())
+  ...
   start
     globals
       globals
