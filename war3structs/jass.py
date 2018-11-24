@@ -185,7 +185,7 @@ class Token(BaseToken):
 
 class JassParser():
   _build_space_before = [
-    'TAKES', 'RETURNS',
+    'TAKES', 'RETURNS', 'EXTENDS',
     'THEN',
     'AND', 'OR'
   ]
