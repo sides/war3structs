@@ -1,4 +1,4 @@
-from lark import Lark, Tree as BaseTree
+from lark import Lark, Tree as BaseTree, Token as BaseToken
 
 """
   Formats: j
@@ -12,6 +12,9 @@ from lark import Lark, Tree as BaseTree
 """
 
 class Tree(BaseTree):
+  pass
+
+class Token(BaseToken):
   pass
 
 class JassParser():
