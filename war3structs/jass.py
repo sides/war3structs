@@ -191,7 +191,7 @@ class JassParser():
   ]
 
   _build_space_after = [
-    'CONSTANT', 'NATIVE' 'KTYPE', 'TYPE', 'ARRAY',
+    'CONSTANT', 'NATIVE', 'KTYPE', 'TYPE', 'ARRAY', 'EXTENDS',
     'FUNCTION', 'TAKES', 'RETURNS',
     'SET', 'CALL', 'LOCAL', 'EXITWHEN', 'DEBUG',
     'IF', 'ELSEIF', 'ELSE', 'RETURN',
