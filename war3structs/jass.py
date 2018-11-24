@@ -1,3 +1,6 @@
+import re
+import io
+
 from lark import Lark, Tree as BaseTree, Token as BaseToken
 
 """
@@ -236,18 +239,25 @@ class JassParser():
     stream = io.StringIO('')
 
     with stream:
-      for token in ast.scan_values(lambda p: True):
-        if token.type == 'NEWLINE':
+      gen = ast.scan_values(lambda p: True)
+      cur = next(gen, None)
+
+      while cur is not None:
+        nex = next(gen, None)
+
+        if cur.type == 'NEWLINE':
           val = '\n'
         else:
-          if token.type in JassParser._build_space_before:
+          if cur.type in JassParser._build_space_before:
             val = ' '
           else:
             val = ''
-          val += token.value
-          if token.type in JassParser._build_space_after:
+          val += cur.value
+          if (cur.type in JassParser._build_space_after and
+            not nex is None and not nex.type == 'NEWLINE'):
             val += ' '
 
         stream.write(val)
+        cur = nex
 
       return stream.getvalue()
