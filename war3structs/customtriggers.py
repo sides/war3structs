@@ -9,7 +9,7 @@ from .common import *
 """
 
 CustomTrigger = Struct(
-  "code_size" / Integer, # including null terminated char
+  "code_size" / Integer, # including null terminator
   "code" / String # is of the length above
 )
 

@@ -243,7 +243,7 @@ class JassParser():
       cur = next(gen, None)
 
       while cur is not None:
-        nex = next(gen, None)
+        nxt = next(gen, None)
 
         if cur.type == 'NEWLINE':
           val = '\n'
@@ -254,10 +254,10 @@ class JassParser():
             val = ''
           val += cur.value
           if (cur.type in JassParser._build_space_after and
-            not nex is None and not nex.type == 'NEWLINE'):
+            not nxt is None and not nxt.type == 'NEWLINE'):
             val += ' '
 
         stream.write(val)
-        cur = nex
+        cur = nxt
 
       return stream.getvalue()

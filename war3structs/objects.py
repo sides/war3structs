@@ -20,8 +20,8 @@ class ObjectModificationTerminatorValidator(Validator):
 
 ObjectModification = Struct(
   "modification_id" / ByteId,
-  "variable_type" / Enum(Integer, INT=0, REAL=1, UNREAL=2, STRING=3),
-  "value" / Switch(this.variable_type, {
+  "value_type" / Enum(Integer, INT=0, REAL=1, UNREAL=2, STRING=3),
+  "value" / Switch(this.value_type, {
     "INT" : Integer,
     "REAL" : Float,
     "UNREAL" : Float,
@@ -50,10 +50,10 @@ ObjectsFile = Struct(
 
 ObjectModificationWithVariation = Struct(
   "modification_id" / ByteId,
-  "variable_type" / Enum(Integer, INT=0, REAL=1, UNREAL=2, STRING=3),
+  "value_type" / Enum(Integer, INT=0, REAL=1, UNREAL=2, STRING=3),
   "variation" / Integer,
   "ability_data_column" / Enum(Integer, A=0, B=1, C=2, D=3, F=4, G=5, H=6),
-  "value" / Switch(this.variable_type, {
+  "value" / Switch(this.value_type, {
     "INT" : Integer,
     "REAL" : Float,
     "UNREAL" : Float,
