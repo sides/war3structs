@@ -1,7 +1,8 @@
 import re
 import io
 
-from lark import Lark, Tree as BaseTree, Token as BaseToken
+from lark import Lark
+from .jass_mapping import MapperTransformer, Tree
 
 """
   Formats: j
@@ -105,13 +106,13 @@ grammar = """
 
   type_declr        : KTYPE ID EXTENDS (HANDLE | ID)
 
-  globals           : GLOBALS NEWLINE global_var_declr* ENDGLOBALS
-
-  global_var_declr  : (CONSTANT TYPE ID EQUALS expr NEWLINE | _var_declr NEWLINE)
-
   native_func_declr : CONSTANT? NATIVE func_declr
 
   func_declr        : ID TAKES (NOTHING | TYPE ID (COMMA TYPE ID)*) RETURNS (NOTHING | TYPE)
+
+  globals           : GLOBALS NEWLINE (global_var_declr NEWLINE)* ENDGLOBALS
+
+  global_var_declr  : (CONSTANT TYPE ID EQUALS expr | _var_declr)
 
   local_var_declr   : LOCAL _var_declr
 
@@ -131,8 +132,6 @@ grammar = """
 
   statements      : (_statement NEWLINE)*
 
-  loop_statements : (_statement NEWLINE | exitwhen NEWLINE)* -> statements
-
   _statement      : set | call | ifthenelse | loop | return | debug
 
   set             : SET ID EQUALS expr | SET ID LBRACKET expr RBRACKET EQUALS expr
@@ -142,6 +141,8 @@ grammar = """
   ifthenelse      : IF expr THEN NEWLINE statements (ELSEIF expr THEN NEWLINE statements)* (ELSE NEWLINE statements)? ENDIF
 
   loop            : LOOP NEWLINE loop_statements ENDLOOP
+
+  loop_statements : (_statement NEWLINE | exitwhen NEWLINE)* -> statements
 
   exitwhen        : EXITWHEN expr
 
@@ -177,12 +178,6 @@ grammar = """
   %ignore WHITESPACE
 """
 
-class Tree(BaseTree):
-  pass
-
-class Token(BaseToken):
-  pass
-
 class JassParser():
   _build_space_before = [
     'TAKES', 'RETURNS', 'EXTENDS',
@@ -202,7 +197,7 @@ class JassParser():
 
   def _get_lark():
     if JassParser._lark is None:
-      JassParser._lark = Lark(grammar, parser="lalr", tree_class=Tree)
+      JassParser._lark = Lark(grammar, parser="lalr", transformer=MapperTransformer(), tree_class=Tree)
 
     return JassParser._lark
 
