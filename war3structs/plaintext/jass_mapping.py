@@ -206,9 +206,8 @@ class FunctionTree(Tree, WithFuncDeclr):
 
   def rename_local(self, old_id, new_id):
     # This works for args too
-    for ref in self.scan_values(lambda v: v.value == old_id):
-      if ref.type == 'ID':
-        ref.value = new_id
+    for ref in self.scan_values(lambda v: v.value == old_id and v.type == 'ID'):
+      ref.value = new_id
 
 
 class ScriptTree(Tree):
@@ -282,9 +281,8 @@ class ScriptTree(Tree):
       item.id.value = new_id
       look_for = 'TYPE'
 
-    for tok in self.scan_values(lambda v: v.value == id):
-      if tok.type == look_for:
-        tok.value = new_id
+    for tok in self.scan_values(lambda v: v.value == id and v.type == 'ID'):
+      tok.value = new_id
 
   def _replace_in_list(self, attr, old, new):
     trees = getattr(self, attr)
