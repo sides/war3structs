@@ -10,7 +10,6 @@ from lark import (
 # lark but with getters and setters that deal with abstracting their
 # children.
 #
-#
 # It's a developer's responsibility to know these properties are
 # merely convenience functions and come with all the same overhead.
 #
