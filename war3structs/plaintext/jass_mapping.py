@@ -258,6 +258,7 @@ class ScriptTree(Tree):
       gs.children.append(g)
       gs.children.append(Token('NEWLINE', '\n'))
     gs.children.append(Token('ENDGLOBALS', 'endglobals'))
+    gs.children.append(Token('NEWLINE', '\n'))
 
     fs = []
     for f in functions:
