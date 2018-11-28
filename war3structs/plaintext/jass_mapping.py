@@ -204,6 +204,12 @@ class FunctionTree(Tree, WithFuncDeclr):
       new_stms.append(Token('NEWLINE', '\n'))
     stms.children = new_stms
 
+  def rename_local(self, old_id, new_id):
+    # This works for args too
+    for ref in self.scan_values(lambda v: v == old_id):
+      if ref.type == 'ID':
+        ref.value = new_id
+
 
 class ScriptTree(Tree):
   """Properties for the root script"""
