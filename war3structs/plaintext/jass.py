@@ -201,6 +201,11 @@ class JassParser():
 
     return JassParser._lark
 
+  def lex(text):
+    """Get tokens from text"""
+
+    return JassParser._get_lark().lex(text)
+
   def parse(text):
     """Get the AST of JASS code"""
 
