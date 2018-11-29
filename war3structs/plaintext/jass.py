@@ -130,44 +130,46 @@ grammar = """
 
   // Statements
 
-  statements      : (_statement NEWLINE)*
+  statements             : (statement NEWLINE)*
 
-  _statement      : set | call | ifthenelse | loop | return | debug
+  statement              : _set | _call | _ifthenelse | _loop | _return | _debug
 
-  set             : SET ID EQUALS expr | SET ID LBRACKET expr RBRACKET EQUALS expr
+  _set                   : SET ID EQUALS expr | SET ID LBRACKET expr RBRACKET EQUALS expr
 
-  call            : CALL func_call
+  _call                  : CALL _func_call
 
-  ifthenelse      : IF expr THEN NEWLINE statements (ELSEIF expr THEN NEWLINE statements)* (ELSE NEWLINE statements)? ENDIF
+  _ifthenelse            : IF expr THEN NEWLINE _ifthenelse_statements (ELSEIF expr THEN NEWLINE _ifthenelse_statements)* (ELSE NEWLINE _ifthenelse_statements)? ENDIF
 
-  loop            : LOOP NEWLINE loop_statements ENDLOOP
+  _ifthenelse_statements : ((_set | _call | _ifthenelse | _loop | _return | _debug) NEWLINE)*
 
-  loop_statements : (_statement NEWLINE | exitwhen NEWLINE)* -> statements
+  _loop                  : LOOP NEWLINE _loop_statements ENDLOOP
 
-  exitwhen        : EXITWHEN expr
+  _loop_statements       : ((_set | _call | _ifthenelse | _loop | _return | _debug | _exitwhen) NEWLINE)*
 
-  return          : RETURN expr?
+  _exitwhen              : EXITWHEN expr
 
-  debug           : DEBUG (set | call | ifthenelse | loop)
+  _return                : RETURN expr?
+
+  _debug                 : DEBUG (_set | _call | _ifthenelse | _loop)
 
 
   // Expressions
 
-  expr           : binary_op | unary_op | func_call | array_ref | func_ref | ID | _const | parens
+  ?expr           : _binary_op | _unary_op | _func_call | _array_ref | _func_ref | ID | _const | _parens
 
-  binary_op      : expr (PLUS | MINUS | TIMES | DIVIDE | EQ | NE | LT | GT | LE | GE | AND | OR) expr
+  _binary_op      : expr (PLUS | MINUS | TIMES | DIVIDE | EQ | NE | LT | GT | LE | GE | AND | OR) expr
 
-  unary_op       : (PLUS | MINUS | NOT) expr
+  _unary_op       : (PLUS | MINUS | NOT) expr
 
-  func_call      : ID LPARENS args? RPARENS
+  _func_call      : ID LPARENS args? RPARENS
 
-  array_ref      : ID LBRACKET expr RBRACKET
+  _array_ref      : ID LBRACKET expr RBRACKET
 
-  func_ref       : FUNCTION ID
+  _func_ref       : FUNCTION ID
 
-  _const         : REAL_CONST | INT_CONST_HEX | INT_CONST_OCT | INT_CONST_DEC | INT_LITERAL | BOOL_CONST | STRING_LITERAL | NULL_CONST
+  _const          : REAL_CONST | INT_CONST_HEX | INT_CONST_OCT | INT_CONST_DEC | INT_LITERAL | BOOL_CONST | STRING_LITERAL | NULL_CONST
 
-  parens         : LPARENS expr RPARENS
+  _parens         : LPARENS expr RPARENS
 
 
   NEWLINE    : /([\\r]?[\\n])+/
