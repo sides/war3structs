@@ -113,11 +113,6 @@ class JassScript():
       if global_.type == old_id:
         global_.type = new_id
 
-      if not global_.equals is None:
-        for token in global_.equals:
-          if token.value == old_id and token.type == 'TYPE':
-            token.value = new_id
-
     for function in self.functions:
       for index, takes in enumerate(function.takes):
         if takes[0] == old_id:
@@ -129,11 +124,6 @@ class JassScript():
       for local in function.locals:
         if local.type == old_id:
           local.type = new_id
-
-        if not local.equals is None:
-          for token in local.equals:
-            if token.value == old_id and token.type == 'TYPE':
-              token.value = new_id
 
   def rename(self, old_id, new_id):
     symbol = self[old_id]
