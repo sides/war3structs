@@ -125,8 +125,6 @@ grammar = """
 
   locals : (local_var_declr NEWLINE)*
 
-  args   : expr (COMMA expr)*
-
 
   // Statements
 
@@ -161,7 +159,9 @@ grammar = """
 
   _unary_op       : (PLUS | MINUS | NOT) expr
 
-  _func_call      : ID LPARENS args? RPARENS
+  _func_call      : ID LPARENS _func_call_args? RPARENS
+
+  _func_call_args : expr (COMMA expr)*
 
   _array_ref      : ID LBRACKET expr RBRACKET
 
