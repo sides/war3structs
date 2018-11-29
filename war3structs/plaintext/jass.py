@@ -2,7 +2,7 @@ import re
 import io
 
 from lark import Lark
-from .jass_mapping import MapperTransformer, Tree
+from .jass_mapping import JassScriptTransformer
 
 """
   Formats: j
@@ -106,9 +106,11 @@ grammar = """
 
   type_declr        : KTYPE ID EXTENDS (HANDLE | ID)
 
-  native_func_declr : CONSTANT? NATIVE func_declr
+  native_func_declr : CONSTANT? NATIVE _func_declr
 
-  func_declr        : ID TAKES (NOTHING | TYPE ID (COMMA TYPE ID)*) RETURNS (NOTHING | TYPE)
+  _func_declr       : ID TAKES (NOTHING | func_declr_args) RETURNS (NOTHING | TYPE)
+
+  func_declr_args   : TYPE ID (COMMA TYPE ID)*
 
   globals           : GLOBALS NEWLINE (global_var_declr NEWLINE)* ENDGLOBALS
 
@@ -121,7 +123,7 @@ grammar = """
 
   // Functions
 
-  func   : CONSTANT? FUNCTION func_declr NEWLINE locals statements ENDFUNCTION
+  func   : CONSTANT? FUNCTION _func_declr NEWLINE locals statements ENDFUNCTION
 
   locals : (local_var_declr NEWLINE)*
 
@@ -199,14 +201,14 @@ class JassParser():
 
   def _get_lark():
     if JassParser._lark is None:
-      JassParser._lark = Lark(grammar, parser="lalr", transformer=MapperTransformer(), tree_class=Tree)
+      JassParser._lark = Lark(grammar, parser="lalr", transformer=JassScriptTransformer())
 
     return JassParser._lark
 
   def lex(text):
     """Get tokens from text"""
 
-    return JassParser._get_lark().lex(text)
+    return list(JassParser._get_lark().lex(text))
 
   def parse(text):
     """Get the AST of JASS code"""
@@ -241,7 +243,7 @@ class JassParser():
     stream = io.StringIO('')
 
     with stream:
-      gen = ast.scan_values(lambda p: True)
+      gen = ast.get_conga_line()
       cur = next(gen, None)
 
       while cur is not None:
