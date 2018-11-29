@@ -102,9 +102,9 @@ class JassScript():
         type_.extends = new_id
 
     for native in self.natives:
-      for takes in native.takes:
+      for index, takes in enumerate(native.takes):
         if takes[0] == old_id:
-          takes[0] = new_id
+          native.takes[index] = (new_id, takes[1])
 
       if native.returns == old_id:
         native.returns = new_id
@@ -119,9 +119,9 @@ class JassScript():
             token.value = new_id
 
     for function in self.functions:
-      for takes in function.takes:
+      for index, takes in enumerate(function.takes):
         if takes[0] == old_id:
-          takes[0] = new_id
+          function.takes[index] = (new_id, takes[1])
 
       if function.returns == old_id:
         function.returns = new_id
