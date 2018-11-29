@@ -281,7 +281,7 @@ class ScriptTree(Tree):
       item.id.value = new_id
       look_for = 'TYPE'
 
-    for tok in self.scan_values(lambda v: v.value == id and v.type == 'ID'):
+    for tok in self.scan_values(lambda v: v.value == id and v.type == look_for):
       tok.value = new_id
 
   def _replace_in_list(self, attr, old, new):
