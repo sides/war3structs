@@ -45,7 +45,7 @@ ObserverPlayerUpgrade = Struct(
   ),
   "level" / Int32ul,
   "level_max" / Int32ul,
-  "unknown_int_1" / Int32ul
+  "unknown_int_1" / Int32ul # ?
 )
 
 ObserverPlayerBuilding = Struct(
@@ -65,8 +65,8 @@ ObserverPlayerHeroItem = Struct(
 ObserverPlayerHeroAbility = Struct(
   "id" / FlippedByteId,
   "name" / PaddedString(38, "utf8"),
-  "unknown_flag_1" / Byte,
-  "unknown_flag_2" / Byte,
+  "unknown_flag_1" / Byte, # ?
+  "unknown_flag_2" / Byte, # ?
   "cooldown" / Float32l, # in seconds
   "level" / Int32ul
 )
@@ -141,8 +141,8 @@ ObserverPlayer = Padded(2510604, Struct(
   "upgrades_completed" / Padded(115884, Array(this.upgrades_completed_count, ObserverPlayerUpgrade)),
   "units_on_map_count" / Int32ul,
   "units_on_map" / Padded(115884, Array(this.units_on_map_count, ObserverPlayerUnit)), # including heroes and corpses
-  "research_in_progress_count" / Int32ul,
-  "research_in_progress" / Padded(108891, Array(this.research_in_progress_count, ObserverPlayerResearch)) # including unit training
+  "researches_in_progress_count" / Int32ul,
+  "researches_in_progress" / Padded(108891, Array(this.researches_in_progress_count, ObserverPlayerResearch)) # including unit training
 ))
 
 ObserverGame = Struct(
