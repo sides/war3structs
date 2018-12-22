@@ -3,6 +3,7 @@ from .common import *
 
 """
   Formats: War3StatsObserverSharedMemory
+  Version: 0
 
   The structure of the memory mapped observer API file. It can be read
   in-game with the mmap python module.
