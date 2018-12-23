@@ -11,10 +11,10 @@ from .common import *
 
 class FlippedByteStringAdapter(Adapter):
   def _decode(self, obj, context, path):
-    return bytes(obj[::-1])
+    return bytes(obj[::-1]).decode('utf-8')
 
   def _encode(self, obj, context, path):
-    return list(obj)[::-1]
+    return list(obj.encode('utf-8'))[::-1]
 
 FlippedByteId = FlippedByteStringAdapter(Byte[4])
 
