@@ -83,8 +83,8 @@ ObserverPlayerHero = Padded(2060, Struct(
   "mana_max" / Int32ul,
   "abilities_count" / Int32ul,
   "abilities" / Padded(1248, Array(this.abilities_count, ObserverPlayerHeroAbility)),
-  "items_count" / Int32ul,
-  "items" / Array(this.items_count, ObserverPlayerHeroItem)
+  "inventory_count" / Int32ul,
+  "inventory" / Array(this.inventory_count, ObserverPlayerHeroItem)
 ))
 
 ObserverPlayer = Padded(2510604, Struct(
