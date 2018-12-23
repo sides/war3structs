@@ -71,7 +71,7 @@ ObserverPlayerHeroAbility = Struct(
   "level" / Int32ul
 )
 
-ObserverPlayerHero = Struct(
+ObserverPlayerHero = Padded(2060, Struct(
   "id" / FlippedByteId,
   "class" / PaddedString(100, "utf8"),
   "level" / Int32ul,
@@ -85,7 +85,7 @@ ObserverPlayerHero = Struct(
   "abilities" / Padded(1248, Array(this.abilities_count, ObserverPlayerHeroAbility)),
   "items_count" / Int32ul,
   "items" / Array(this.items_count, ObserverPlayerHeroItem)
-)
+))
 
 ObserverPlayer = Padded(2510604, Struct(
   "name" / PaddedString(36, "utf8"),
