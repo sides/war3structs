@@ -146,6 +146,7 @@ ObserverPlayer = Padded(2510604, Struct(
 ))
 
 ObserverGame = Struct(
+  "refresh_rate" / Int32ul,
   "is_in_game" / BooleanAdapter(Byte),
   "game_time" / Int32ul, # in ms
   "players_count" / Byte,
@@ -155,7 +156,6 @@ ObserverGame = Struct(
 
 ObserverFile = Struct(
   "version" / Int32ul,
-  "refresh_rate" / Int32ul,
   "game" / ObserverGame,
   "players" / Array(this.game.players_count, ObserverPlayer)
 )

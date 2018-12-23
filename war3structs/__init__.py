@@ -6,6 +6,7 @@ from .map import MapFile
 from .metadata import MetadataFile
 from .minimapicons import MinimapIconsFile
 from .objects import ObjectsFile, ObjectsWithVariationsFile, ObjectsBestFitFile
+from .observer import ObserverFile
 from .pathmap import PathMapFile
 from .regions import RegionsFile
 from .shadowmap import ShadowMapFile
