@@ -4,7 +4,22 @@ war3structs
 Python construct definitions for Warcraft III file formats.
 
 
-Usage
+Summary
+-----------------
+
+war3structs was originally meant to be declarative definitions for
+structures used by Warcraft. This means it provides both utility for
+hacking away at maps on the command-line or with scripts using Python,
+while also serving as readable documentation of them so they can be
+implemented in other more performance oriented languages.
+
+It does this, and has since evolved to include support for almost all
+file formats used by Warcraft, including plaintext and storage,
+allowing programs like war3archiver to achieve their goal purely in
+Python.
+
+
+Structures
 -----------------
 
 Structures are located in war3structs/ and come with full structures
@@ -47,38 +62,38 @@ JASS, using a Lark parser. Example:
   >>> with open("./war3map.j", "r") as data:
   ...   contents = data.read()
   ...   ast = JassParser.parse(contents)
-  ...   print(ast.pretty())
+  ...   print(ast['main'].statements[0])
   ...
-  start
-    globals
-      globals
-
-
-      global_var_declr
-        integer
-        myvar
-        =
-        expr      0
-
-
-      endglobals
+  [Token(CALL, 'call'), Token(ID, 'ExecuteFunc'), Token(LPARENS, '('),
+  Token(STRING_LITERAL, '"InitTrig_System_Data"'), Token(RPARENS, ')')]
 
 Read more about Lark: https://github.com/lark-parser/lark
+
+
+MPQ
+-----------------
+
+It can also read MPQs and CASC storage. However, it achieves this via
+bindings to StormLib and CascLib. You will therefore not find
+documentation on these formats in this repo. Example:
+
+>>> from war3structs.storage import MPQ
+>>> map = MPQ('./map.w3x')
+>>> map.read('(listfile)')
+b'war3map.w3e\r\nwar3map.w3i\r\nwar3map.wtg\r\nwar3map.wct\r\nwar3map.wts\r\nwar
+3map.j\r\nwar3map.shd\r\nwar3mapMap.blp\r\nwar3map.mmp\r\nwar3map.wpm\r\nwar3map
+.doo\r\nwar3mapUnits.doo\r\nwar3map.w3r\r\nwar3map.w3c\r\nwar3map.w3u\r\nwar3map
+.w3t\r\nwar3map.w3b\r\nwar3map.w3a\r\nwar3map.w3h\r\nwar3map.w3q\r\nwar3map.w3s\
+r\nwar3map.imp\r\nwar3mapMisc.txt\r\nwar3mapSkin.txt\r\n'
+
+Read more about StormLib: https://github.com/ladislav-zezula/StormLib
+Read more about CascLib: https://github.com/ladislav-zezula/CascLib
 
 
 Status
 -----------------
 
-The formats are loosely tested or barely tested at all, especially as
-far as building goes. It also currently only supports formats inside
-map archives, not the other pack formats such as artificial
-intelligence, campaign and replay files.
-
-I also believe it to be likely that these formats will be updated for
-Warcraft 3 Reforged (fingers crossed for official docs). So, TODO: Add
-some interface to work with different patches. A patch will use
-different data as far as TriggerData.txt goes (triggers) and as far as
-the versions of the formats go. Alternatively don't bother with this at
-all and just keep the formats updated to the latest patch and let
-people worry about using the correctly tagged release on git depending
-on their specs.
+Since these are used for the development of the map Warlock they will
+continue to be updated for Warcraft 3 Reforged and beyond. The package
+will most likely use semver to tag releases appropriately for when
+the structures change with new patches to Warcraft (if they change).

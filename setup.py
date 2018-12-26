@@ -13,6 +13,8 @@ setuptools.setup(
   long_description_content_type="text/plain",
   url="https://github.com/warlockbrawl/war3structs",
   packages=setuptools.find_packages(),
+  package_data={'': ['war3structs/storage/storm.dll', 'war3structs/storage/CascLib.dll']},
+  include_package_data=True,
   classifiers=[
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
