@@ -8,10 +8,10 @@ Summary
 -----------------
 
 war3structs was originally meant to be declarative definitions for
-structures used by Warcraft. This means it provides both utility for
-hacking away at maps on the command-line or with scripts using Python,
-while also serving as readable documentation of them so they can be
-implemented in other more performance oriented languages.
+file structures used by Warcraft. This means it provides both utility
+for hacking away at maps on the command-line or with scripts using
+Python, while also serving as readable documentation of them so they
+can be implemented in other more performance oriented languages.
 
 It does this, and has since evolved to include support for almost all
 file formats used by Warcraft, including plaintext and storage,
@@ -65,7 +65,7 @@ JASS, using a Lark parser. Example:
   ...   print(ast['main'].statements[0])
   ...
   [Token(CALL, 'call'), Token(ID, 'ExecuteFunc'), Token(LPARENS, '('),
-  Token(STRING_LITERAL, '"InitTrig_System_Data"'), Token(RPARENS, ')')]
+  Token(STRING_LITERAL, '"InitTrig_MyTrigger"'), Token(RPARENS, ')')]
 
 Read more about Lark: https://github.com/lark-parser/lark
 
@@ -80,11 +80,12 @@ documentation on these formats in this repo. Example:
 >>> from war3structs.storage import MPQ
 >>> map = MPQ('./map.w3x')
 >>> map.read('(listfile)')
-b'war3map.w3e\r\nwar3map.w3i\r\nwar3map.wtg\r\nwar3map.wct\r\nwar3map.wts\r\nwar
-3map.j\r\nwar3map.shd\r\nwar3mapMap.blp\r\nwar3map.mmp\r\nwar3map.wpm\r\nwar3map
-.doo\r\nwar3mapUnits.doo\r\nwar3map.w3r\r\nwar3map.w3c\r\nwar3map.w3u\r\nwar3map
-.w3t\r\nwar3map.w3b\r\nwar3map.w3a\r\nwar3map.w3h\r\nwar3map.w3q\r\nwar3map.w3s\
-r\nwar3map.imp\r\nwar3mapMisc.txt\r\nwar3mapSkin.txt\r\n'
+b'war3map.w3e\r\nwar3map.w3i\r\nwar3map.wtg\r\nwar3map.wct\r\nwar3map.w
+ts\r\nwar3map.j\r\nwar3map.shd\r\nwar3mapMap.blp\r\nwar3map.mmp\r\nwar3
+map.wpm\r\nwar3map.doo\r\nwar3mapUnits.doo\r\nwar3map.w3r\r\nwar3map.w3
+c\r\nwar3map.w3u\r\nwar3map.w3t\r\nwar3map.w3b\r\nwar3map.w3a\r\nwar3ma
+p.w3h\r\nwar3map.w3q\r\nwar3map.w3s\r\nwar3map.imp\r\nwar3mapMisc.txt\r
+\nwar3mapSkin.txt\r\n'
 
 Read more about StormLib: https://github.com/ladislav-zezula/StormLib
 Read more about CascLib: https://github.com/ladislav-zezula/CascLib
