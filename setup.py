@@ -4,6 +4,10 @@ with open("README", "r") as fh:
   long_description = fh.read()
 
 setuptools.setup(
+  install_requires=[
+    'construct>=2.9',
+    'lark-parser>=0.6'
+  ],
   name="war3structs",
   version="0.0.1-alpha",
   author="sides",

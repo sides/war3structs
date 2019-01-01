@@ -1,2 +1,2 @@
-construct==2.9.45
-lark-parser==0.6.5
+construct
+lark-parser
