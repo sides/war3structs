@@ -17,7 +17,7 @@ setuptools.setup(
   long_description_content_type="text/plain",
   url="https://github.com/warlockbrawl/war3structs",
   packages=setuptools.find_packages(),
-  data_files=[('lib/site-packages', [
+  data_files=[('lib/site-packages/war3structs/storage', [
     'war3structs/storage/storm.dll',
     'war3structs/storage/CascLib.dll'])],
   classifiers=[
