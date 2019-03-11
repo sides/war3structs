@@ -20,14 +20,18 @@ FlippedByteId = FlippedByteStringAdapter(Byte[4])
 
 ObserverPlayerResearch = Struct(
   "id" / FlippedByteId,
-  "name" / PaddedString(100, "utf8"),
+  Padding(100), # name
+                # names are intentionally dismissed due to encoding
+                # issues on different warcraft locales
+                # if you need an object's name, you must get it from
+                # the tables in the game data files
   "progress_percent" / Int32ul,
   "type" / Enum(Byte, UPGRADE=0, UNIT=1)
 )
 
 ObserverPlayerUnit = Struct(
   "id" / FlippedByteId,
-  "name" / PaddedString(100, "utf8"),
+  Padding(100), # name
   "owning_player_id" / Int32ul, # maybe?
   "alive_count" / Int32ul,
   "total_count" / Int32ul
@@ -50,21 +54,21 @@ ObserverPlayerUpgrade = Struct(
 
 ObserverPlayerBuilding = Struct(
   "id" / FlippedByteId,
-  "name" / PaddedString(100, "utf8"),
+  Padding(100), # name
   "progress_percent" / Int32ul,
   "upgrade_progress_percent" / Int32ul
 )
 
 ObserverPlayerHeroItem = Struct(
   "id" / FlippedByteId,
-  "name" / PaddedString(100, "utf8"),
+  Padding(100), # name
   "slot" / Int32ul,
   "charges" / Int32ul
 )
 
 ObserverPlayerHeroAbility = Struct(
   "id" / FlippedByteId,
-  "name" / PaddedString(38, "utf8"),
+  Padding(38), # name
   "unknown_flag_1" / Byte, # ?
   "unknown_flag_2" / Byte, # ?
   "cooldown" / Float32l, # in seconds
