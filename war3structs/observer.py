@@ -9,6 +9,25 @@ from .common import *
   in-game with the mmap python module.
 """
 
+class Utf8FallbackAdapter(Adapter):
+  """Utf8FallbackAdapter class
+
+  This adapter is necessary due to a bug in construct that fails to
+  catch unicode decoding exceptions with the `Optional`, `Select`, etc
+  structs. There is an issue on their tracker about it already.
+  """
+  def _decode(self, obj, context, path):
+    try:
+      return obj.decode('utf-8')
+    except UnicodeDecodeError:
+      return None
+
+  def _encode(self, obj, context, path):
+    try:
+      return obj.encode('utf-8')
+    except UnicodeEncodeError:
+      return None
+
 class FlippedByteStringAdapter(Adapter):
   def _decode(self, obj, context, path):
     return bytes(obj[::-1]).decode('utf-8')
@@ -92,7 +111,8 @@ ObserverPlayerHero = Padded(2060, Struct(
 ))
 
 ObserverPlayer = Padded(2510604, Struct(
-  "name" / PaddedString(36, "utf8"),
+  "name" / Utf8FallbackAdapter(FixedSized(36, NullStripped(GreedyBytes))), # fallback to None if name fails
+                                                                           # to be decoded
   "race_preference" / Enum(Byte,
     HUMAN=0x01,
     ORC=0x02,
