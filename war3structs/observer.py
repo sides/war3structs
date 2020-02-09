@@ -37,40 +37,6 @@ class FlippedByteStringAdapter(Adapter):
 
 FlippedByteId = FlippedByteStringAdapter(Byte[4])
 
-ObserverShopItem = Struct(
-  "id" / FlippedByteId,
-  Padding(100), # name
-                # names are intentionally dismissed due to encoding
-                # issues on different warcraft locales
-                # if you need an object's name, you must get it from
-                # the tables in the game data files
-  "stock" / Int32ul,
-  "stock_max" / Int32ul,
-  "cooldown_time" / Float32l,
-  "cooldown" / Float32l
-)
-
-ObserverShop = Struct(
-  "id" / Byte,
-  Padding(100), # name
-  "owning_player_id" / Int32ul,
-  "items_count" / Int32ul,
-  "items" / Padded(12 * ObserverShopItem.sizeof(), Array(this.items_count, ObserverShopItem))
-)
-
-ObserverPlayerItem = Struct(
-  "id" / FlippedByteId,
-  Padding(100), # name
-  "level" / Int32ul,
-  "collected_count" / Int32ul,
-  "purchased_count" / Int32ul,
-  "sold_count" / Int32ul,
-  "consumed_count" / Int32ul,
-  "destroyed_count" / Int32ul,
-  "damage_dealt" / Int32ul,
-  "damage_healed" / Int32ul
-)
-
 ObserverPlayerResearch = Struct(
   "id" / FlippedByteId,
   Padding(100), # name
