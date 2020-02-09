@@ -9,7 +9,7 @@ setuptools.setup(
     'lark-parser>=0.6'
   ],
   name="war3structs",
-  version="0.2.0",
+  version="0.3.0",
   author="sides",
   author_email="sides@sides.tv",
   description="Python construct definitions for Warcraft III file formats",
