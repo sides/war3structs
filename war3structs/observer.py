@@ -37,6 +37,40 @@ class FlippedByteStringAdapter(Adapter):
 
 FlippedByteId = FlippedByteStringAdapter(Byte[4])
 
+ObserverShopItem = Struct(
+  "id" / FlippedByteId,
+  Padding(100), # name
+                # names are intentionally dismissed due to encoding
+                # issues on different warcraft locales
+                # if you need an object's name, you must get it from
+                # the tables in the game data files
+  "stock" / Int32ul,
+  "stock_max" / Int32ul,
+  "cooldown_time" / Float32l,
+  "cooldown" / Float32l
+)
+
+ObserverShop = Struct(
+  "id" / Byte,
+  Padding(100), # name
+  "owning_player_id" / Int32ul,
+  "items_count" / Int32ul,
+  "items" / Padded(12 * ObserverShopItem.sizeof(), Array(this.items_count, ObserverShopItem))
+)
+
+ObserverPlayerItem = Struct(
+  "id" / FlippedByteId,
+  Padding(100), # name
+  "level" / Int32ul,
+  "collected_count" / Int32ul,
+  "purchased_count" / Int32ul,
+  "sold_count" / Int32ul,
+  "consumed_count" / Int32ul,
+  "destroyed_count" / Int32ul,
+  "damage_dealt" / Int32ul,
+  "damage_healed" / Int32ul
+)
+
 ObserverPlayerResearch = Struct(
   "id" / FlippedByteId,
   Padding(100), # name
@@ -45,7 +79,8 @@ ObserverPlayerResearch = Struct(
                 # if you need an object's name, you must get it from
                 # the tables in the game data files
   "progress_percent" / Int32ul,
-  "type" / Enum(Byte, UPGRADE=0, UNIT=1)
+  "type" / Enum(Byte, UPGRADE=0, UNIT=1, REVIVAL=2),
+  "art" / PaddedString(100, "utf8")
 )
 
 ObserverPlayerUnit = Struct(
@@ -53,7 +88,13 @@ ObserverPlayerUnit = Struct(
   Padding(100), # name
   "owning_player_id" / Int32ul, # maybe?
   "alive_count" / Int32ul,
-  "total_count" / Int32ul
+  "total_count" / Int32ul,
+  "art" / PaddedString(100, "utf8"),
+  "is_worker" / BooleanAdapter(Byte),
+  "is_busy_worker" / BooleanAdapter(Byte),
+  "damage_dealt" / Int32ul,
+  "damage_received" / Int32ul,
+  "damage_healed" / Int32ul
 )
 
 ObserverPlayerUpgrade = Struct(
@@ -68,35 +109,42 @@ ObserverPlayerUpgrade = Struct(
   ),
   "level" / Int32ul,
   "level_max" / Int32ul,
-  "unknown_int_1" / Int32ul # ?
+  "unknown_int_1" / Int32ul, # ?
+  "art" / PaddedString(100, "utf8")
 )
 
 ObserverPlayerBuilding = Struct(
   "id" / FlippedByteId,
   Padding(100), # name
   "progress_percent" / Int32ul,
-  "upgrade_progress_percent" / Int32ul
+  "upgrade_progress_percent" / Int32ul,
+  "art" / PaddedString(100, "utf8")
 )
 
 ObserverPlayerHeroItem = Struct(
   "id" / FlippedByteId,
   Padding(100), # name
   "slot" / Int32ul,
-  "charges" / Int32ul
+  "charges" / Int32ul,
+  "art" / PaddedString(100, "utf8")
 )
 
 ObserverPlayerHeroAbility = Struct(
   "id" / FlippedByteId,
-  Padding(38), # name
-  "unknown_flag_1" / Byte, # ?
-  "unknown_flag_2" / Byte, # ?
+  Padding(36), # name
+  "cooldown_time" / Float32l, # in seconds
   "cooldown" / Float32l, # in seconds
-  "level" / Int32ul
+  "level" / Int32ul,
+  "art" / PaddedString(100, "utf8"),
+  "is_hero_ability" / BooleanAdapter(Byte),
+  "damage_dealt" / Int32ul,
+  "damage_healed" / Int32ul
 )
 
-ObserverPlayerHero = Padded(2060, Struct(
+ObserverPlayerHero = Struct(
   "id" / FlippedByteId,
   "class" / PaddedString(100, "utf8"),
+  "art" / PaddedString(100, "utf8"),
   "level" / Int32ul,
   "experience" / Int32ul,
   "experience_max" / Int32ul,
@@ -104,13 +152,24 @@ ObserverPlayerHero = Padded(2060, Struct(
   "hitpoints_max" / Int32ul,
   "mana" / Int32ul,
   "mana_max" / Int32ul,
+  "damage_dealt" / Int32ul,
+  "damage_received" / Int32ul,
+  "damage_self" / Int32ul,
+  "index" / Int32ul,
+  "damage_healed" / Int32ul,
+  "deaths_count" / Int32ul,
+  "kills_count" / Int32ul,
+  "kills_self" / Int32ul,
+  "kills_heroes" / Int32ul,
+  "kills_buildings" / Int32ul,
+  "time_alive" / Int32ul, # in ms
   "abilities_count" / Int32ul,
-  "abilities" / Padded(1248, Array(this.abilities_count, ObserverPlayerHeroAbility)),
+  "abilities" / Padded(24 * ObserverPlayerHeroAbility.sizeof(), Array(this.abilities_count, ObserverPlayerHeroAbility)),
   "inventory_count" / Int32ul,
-  "inventory" / Array(this.inventory_count, ObserverPlayerHeroItem)
-))
+  "inventory" / Padded(6 * ObserverPlayerHeroItem.sizeof(), Array(this.inventory_count, ObserverPlayerHeroItem))
+)
 
-ObserverPlayer = Padded(2510604, Struct(
+ObserverPlayer = Struct(
   "name" / Utf8FallbackAdapter(FixedSized(36, NullStripped(GreedyBytes))), # fallback to None if name fails
                                                                            # to be decoded
   "race_preference" / Enum(Byte,
@@ -156,18 +215,20 @@ ObserverPlayer = Padded(2510604, Struct(
   "lumber_tax" / Int32ul,
   "food_max" / Int32ul,
   "food" / Int32ul,
-  # why these are padded when they include counts, I don't know
+  # paddings are done on every array, usually with 999 maximums: every struct must be of fixed size
   "heroes_count" / Int32ul,
-  "heroes" / Padded(2057940, Array(this.heroes_count, ObserverPlayerHero)),
+  "heroes" / Padded(999 * ObserverPlayerHero.sizeof(), Array(this.heroes_count, ObserverPlayerHero)),
   "buildings_on_map_count" / Int32ul,
-  "buildings_on_map" / Padded(111888, Array(this.buildings_on_map_count, ObserverPlayerBuilding)),
+  "buildings_on_map" / Padded(999 * ObserverPlayerBuilding.sizeof(), Array(this.buildings_on_map_count, ObserverPlayerBuilding)),
   "upgrades_completed_count" / Int32ul,
-  "upgrades_completed" / Padded(115884, Array(this.upgrades_completed_count, ObserverPlayerUpgrade)),
+  "upgrades_completed" / Padded(999 * ObserverPlayerUpgrade.sizeof(), Array(this.upgrades_completed_count, ObserverPlayerUpgrade)),
   "units_on_map_count" / Int32ul,
-  "units_on_map" / Padded(115884, Array(this.units_on_map_count, ObserverPlayerUnit)), # including heroes and corpses
+  "units_on_map" / Padded(999 * ObserverPlayerUnit.sizeof(), Array(this.units_on_map_count, ObserverPlayerUnit)), # including heroes and corpses
   "researches_in_progress_count" / Int32ul,
-  "researches_in_progress" / Padded(108891, Array(this.researches_in_progress_count, ObserverPlayerResearch)) # including unit training
-))
+  "researches_in_progress" / Padded(999 * ObserverPlayerResearch.sizeof(), Array(this.researches_in_progress_count, ObserverPlayerResearch)), # including unit training
+  Padding(135868), # item history and count, dismissed for now
+  Padding(40) # ? upkeep times, dismissed for now
+)
 
 ObserverGame = Struct(
   "refresh_rate" / Int32ul,
@@ -181,5 +242,6 @@ ObserverGame = Struct(
 ObserverFile = Struct(
   "version" / Int32ul,
   "game" / ObserverGame,
-  "players" / Array(this.game.players_count, ObserverPlayer)
+  "players" / Array(28, ObserverPlayer),
+  Padding(1547451) # shops on map, dismissed for now
 )
